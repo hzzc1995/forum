@@ -4,18 +4,19 @@ import User from '../models/user';
 import md5 from 'blueimp-md5';
 
 const router = express.Router();
+const app = express();
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
     res.render('index.html', {
         user: req.session.user
     });
 });
 
-router.get('/register', (req, res) => {
+router.get('/register', (req, res, next) => {
     res.render('register.html');
 });
 
-router.post('/register', (req, res) => {
+router.post('/register', (req, res, next) => {
 
     const body = req.body;
 
@@ -28,10 +29,7 @@ router.post('/register', (req, res) => {
         }]
     }, (err, data) => {
         if (err) {
-            return res.status(500).json({
-                err_code: 500,
-                message: 'Server Error'
-            });
+            return next(err);
         }
 
         // email/nickname exists
@@ -46,10 +44,7 @@ router.post('/register', (req, res) => {
         body.password = md5(md5(body.password));
         new User(body).save((err, user) => {
             if (err) {
-                return res.status(500).json({
-                    err_code: 500,
-                    message: 'Server Error'
-                });
+                return next(err);
             }
 
             // register successfully, use session to record login status
@@ -65,23 +60,20 @@ router.post('/register', (req, res) => {
     });
 });
 
-router.get('/login', (req, res) => {
+router.get('/login', (req, res, next) => {
     res.render('login.html');
 });
-s
-router.post('/login', (req, res) => {
+
+router.post('/login', (req, res, next) => {
 
     const body = req.body;
 
     User.findOne({
-        email: body,email,
+        email: body, email,
         password: md5(md5(body.password))
     }, (err, user) => {
         if (err) {
-            return res.status(500).json({
-                err_code: 500,
-                message: err.message
-            });
+            return next(err);
         }
 
         if (!user) {
@@ -101,11 +93,13 @@ router.post('/login', (req, res) => {
     });
 });
 
-router.get('/logout', (req, res) => {
+router.get('/logout', (req, res, next) => {
     // clear session
-    req.session.user = null;
+    // req.session.user = null;
+    delete res.session.user;
 
     res.redirect('/login'); // can do redirect from server side because login request is not asnyc.
 })
+
 
 module.exports = router;

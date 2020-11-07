@@ -29,6 +29,19 @@ app.use(session({
 app.use(sessionRouter);
 app.use(topicRouter);
 
+// 404 middleware
+app.use((req, res) => {
+  res.send('404 not found');
+});
+
+// middleware to handle error
+app.use((err, req, res, next) => {
+  res.status(500).json({
+    err_code: 500,
+    message: err.message
+  });
+});
+
 app.listen(3000, () => {
     console.log('running on http://127.0.0.1:3000/');
 });

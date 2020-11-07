@@ -2,6 +2,8 @@
 
 Simple forum built with Node.js and MongoDB Atlas.  
 
+session is storing in the memory.  
+
 ## Project tree
 
 .
@@ -16,7 +18,7 @@ Simple forum built with Node.js and MongoDB Atlas.
 ├── file_in_root.ext
 └── README.md
 
-## Route design
+## Route design for sessions
 
 |    path   | method | get param |         post param        | login needed |         comment         |
 |:---------:|:------:|:---------:|:-------------------------:|:------------:|:-----------------------:|
