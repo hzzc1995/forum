@@ -2,6 +2,7 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import sessionRouter from './routes/session';
 import topicRouter from './routes/topic';
+import session from 'express-session';
 
 var path = require('path');
 
@@ -16,6 +17,14 @@ app.set('views', path.join(__dirname, './views/'));  // optional
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+
+// session is an object which can be added or read
+app.use(session({
+    secret: 'salt value',
+    resave: false,
+    saveUninitialized: true // assign cookie even if no session
+  }));
+
 
 app.use(sessionRouter);
 app.use(topicRouter);

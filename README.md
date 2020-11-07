@@ -1,8 +1,7 @@
 # forum
 
-Simple forum built with Node.js and mongoose
+Simple forum built with Node.js and MongoDB Atlas.  
 
-structure:
 ## Project tree
 
 .
